@@ -6,6 +6,7 @@ def process():
     user = username.get()
     passw = password.get()
     test.start(user, passw)
+    lbl_value["text"] = "Finished"
     
 
 
@@ -16,8 +17,6 @@ username.pack()
 
 password = tk.Entry(fg="yellow", bg="black", width=50)
 password.pack()
-
-
 
 
 btn_start = tk.Button(master=window, text="Start", command=process)

@@ -3,6 +3,7 @@ import imaplib
 import email
 import webbrowser
 import re
+import urllib.request
 
 def initializeServer(username, app_password) :
 
@@ -16,16 +17,16 @@ def initializeServer(username, app_password) :
     mail.login(username, app_password)
 
     #select inbox
-    mail.select("INBOX")
+    mail.select("College")
 
     #select specific mails
-    _, selected_mails = mail.search(None, '(FROM "kh4dien@gmail.com")')
+    _, selected_mails = mail.search(None, '(FROM "collegeadmissions@uchicago.edu")')
 
     return mail, selected_mails
 
 
 def getLinks(username, password) :
-    links = None
+    links = []
     mail, selected_mails = initializeServer(username, password)
 
     #total number of mails from specific user
@@ -48,13 +49,23 @@ def getLinks(username, password) :
             if part.get_content_type()=="image" or part.get_content_type()=="text/html":
                 message = part.get_payload(decode=True)
                 decodedMessage = message.decode()
-                links = re.findall(r'(https?://[^\s]+)', decodedMessage)
+                inMessageLinks = re.findall(r'(https?://[^\s]+)', decodedMessage)
+                links.append(inMessageLinks)
                 print("==========================================\n")
-                return links
+
+    return links
     
 
 def start(username, password) :
     links = getLinks(username, password)
+    print(links[0][0])
+    for link in links[0] :
+        urllib.request.urlopen(link)
+    """
     for link in links :
-        webbrowser.open_new_tab(link)
+        webbrowser.open(link)
+    
+    """
+
+start("cjuang23@sjs.org", "3874NmEb")
 
