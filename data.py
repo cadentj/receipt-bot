@@ -1,4 +1,4 @@
-def get_colleges() :
+def get_colleges_dic() :
     college_list = {
         "Case Western" : "admission@case.edu",
         "University of Chicago" : "collegeadmissions@uchicago.edu",
@@ -8,6 +8,9 @@ def get_colleges() :
         "Carnegie Mellon" : "admission@andrew.cmu.edu"
     }
     return college_list
+
+def get_colleges() :
+    return get_colleges_dic().keys()
 
 def create_email_list(college_names) :
     college_list = get_colleges()

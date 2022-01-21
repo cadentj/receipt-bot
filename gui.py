@@ -1,29 +1,36 @@
+from distutils import command
 from doctest import master
 from tabnanny import check
 import tkinter as tk
 import receipt
+import functools
 import data
 
 
 selected_colleges = []
 college_checkboxes = {}
-college_list = data.get_colleges()
 
 def create_college_checkboxes() :
+    college_list = data.get_colleges()
     for college in college_list :
-        college_checkboxes.update({college, 0})
-
-
+        college_checkboxes.update({college:0})
 
 def process():
+    for status in college_checkboxes : 
+        print(college_checkboxes[status])
+
     print(selected_colleges)
     
 
-def isChecked(college_name) :
-    if college_checkboxes.get(college_name) == 1:
-        add_college(college_name)
-    if college_checkboxes.get() == 0:
-        remove_college(college_name)    
+def updateCheck(college) :
+    print(college)
+    check_status = college_checkboxes.get(college)
+    if check_status == 0 :
+        college_checkboxes[college] = 1
+        add_college(college)
+    elif check_status == 1 :
+        college_checkboxes[college] = 0
+        remove_college(college)
 
 
 def add_college(college_name) :
@@ -68,6 +75,9 @@ def createBotFrame(root) :
     # Create and add checkboxes
     create_checkboxes(root)
 
+    button = tk.Button(text="Start", command=lambda:process())
+    button.grid(row=4, column=1, padx=10, pady=10)
+
     root.columnconfigure(0,weight=1)
     root.columnconfigure(1,weight=1)
 
@@ -78,17 +88,14 @@ def create_checkboxes(root) :
     create_college_checkboxes()
 
     colleges = data.get_colleges()
+
     for college_name in colleges :
-        check = tk.Checkbutton(
+        tk.Checkbutton(
             master = checkboxes_frame, 
             text=college_name, 
-            variable = college_checkboxes[college_name],
-            onvalue=1,
-            offvalue=0,
-            command=isChecked(college_name)
-        )
-        check.pack()
-        
+            command=functools.partial(updateCheck(college_name)) 
+        ).pack()
+        print(college_name)
     
     checkboxes_frame.grid(row=3, column=0, columnspan=2,sticky='NESW')
 
