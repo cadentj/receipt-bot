@@ -3,7 +3,7 @@ import imaplib
 import email
 import webbrowser
 import re
-import urllib.request
+import requests
 
 def initializeServer(username, app_password) :
 
@@ -17,10 +17,10 @@ def initializeServer(username, app_password) :
     mail.login(username, app_password)
 
     #select inbox
-    mail.select("College")
+    mail.select("INBOX")
 
     #select specific mails
-    _, selected_mails = mail.search(None, '(FROM "collegeadmissions@uchicago.edu")')
+    _, selected_mails = mail.search(None, '(FROM "kh4dien@gmail.com")')
 
     return mail, selected_mails
 
@@ -57,15 +57,10 @@ def getLinks(username, password) :
     
 
 def start(username, password) :
-    links = getLinks(username, password)
-    print(links[0][0])
-    for link in links[0] :
-        urllib.request.urlopen(link)
-    """
-    for link in links :
-        webbrowser.open(link)
-    
-    """
+    emailLinks = getLinks(username, password)
+    for links in emailLinks :
+        for link in links :
+            requests.get(link) 
 
 start("cjuang23@sjs.org", "3874NmEb")
 
