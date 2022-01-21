@@ -8,3 +8,12 @@ def get_colleges() :
         "Carnegie Mellon" : "admission@andrew.cmu.edu"
     }
     return college_list
+
+def create_email_list(college_names) :
+    college_list = get_colleges()
+    email_list = []
+    for college in college_names :
+        email_list.append(college_list[college])
+
+    print(email_list)
+    return email_list

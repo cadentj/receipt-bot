@@ -1,25 +1,28 @@
 from doctest import master
 from tabnanny import check
 import tkinter as tk
-from turtle import width
-import test
+import receipt
 import data
 
 
 selected_colleges = []
+college_checkboxes = {}
+college_list = data.get_colleges()
+
+def create_college_checkboxes() :
+    for college in college_list :
+        college_checkboxes.update({college, 0})
+
+
 
 def process():
-    lbl_value["text"] = "Processing..."
-    user = username.get()
-    passw = password.get()
-    test.start(user, passw)
-    lbl_value["text"] = "Finished"
+    print(selected_colleges)
     
 
 def isChecked(college_name) :
-    if check.get() == 1:
+    if college_checkboxes.get(college_name) == 1:
         add_college(college_name)
-    if check.get() == 0:
+    if college_checkboxes.get() == 0:
         remove_college(college_name)    
 
 
@@ -72,16 +75,20 @@ def createBotFrame(root) :
 def create_checkboxes(root) :
     checkboxes_frame = tk.Frame(master=root)
 
+    create_college_checkboxes()
+
     colleges = data.get_colleges()
     for college_name in colleges :
         check = tk.Checkbutton(
             master = checkboxes_frame, 
             text=college_name, 
+            variable = college_checkboxes[college_name],
             onvalue=1,
             offvalue=0,
             command=isChecked(college_name)
         )
         check.pack()
+        
     
     checkboxes_frame.grid(row=3, column=0, columnspan=2,sticky='NESW')
 
