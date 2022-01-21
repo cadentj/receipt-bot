@@ -1,6 +1,9 @@
+from doctest import master
+from tabnanny import check
 import tkinter as tk
 from turtle import width
 import test
+import data
 
 
 def process():
@@ -41,18 +44,25 @@ def createBotFrame(root) :
     password.grid(row=2, column=0,sticky='NESW')
     password_entry.grid(row=2, column=1,sticky='NESW', padx=10, pady=10)
 
-    email = tk.Label(
-        text="Emails",
-    )
-    email_entry = tk.Text(
-    )
-    email.grid(row=3, column=0,sticky='NESW')
-    email_entry.grid(row=4, column=0, columnspan=2,sticky='NESW')
+
+
+    create_checkboxes(root)
 
     root.columnconfigure(0,weight=1)
     root.columnconfigure(1,weight=1)
-    
 
+
+def create_checkboxes(root) :
+    checkboxes_frame = tk.Frame(master=root)
+
+    colleges = data.get_colleges()
+    for college_name in colleges :
+        check = tk.Checkbutton(master = checkboxes_frame, text=college_name)
+        check.pack()
+    
+    checkboxes_frame.grid(row=3, column=0, columnspan=2,sticky='NESW')
+
+        
 
     
 
