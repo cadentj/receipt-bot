@@ -1,7 +1,7 @@
-from distutils import command
 from doctest import master
 from tabnanny import check
 import tkinter as tk
+from unittest.util import sorted_list_difference
 import receipt
 import functools
 import data
@@ -93,13 +93,11 @@ def create_checkboxes(root) :
         tk.Checkbutton(
             master = checkboxes_frame, 
             text=college_name, 
-            command=functools.partial(updateCheck(college_name)) 
+            command= functools.partial(updateCheck, college_name)
         ).pack()
         print(college_name)
     
     checkboxes_frame.grid(row=3, column=0, columnspan=2,sticky='NESW')
-
-    
 
     
 
