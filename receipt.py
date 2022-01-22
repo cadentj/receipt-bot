@@ -5,8 +5,7 @@ import webbrowser
 import re
 import requests
 
-def initializeServer(username, app_password) :
-
+def initializeServer(username, app_password, email_search) :
     # https://www.systoolsgroup.com/imap/
     gmail_host= 'imap.gmail.com'
 
@@ -20,14 +19,14 @@ def initializeServer(username, app_password) :
     mail.select("INBOX")
 
     #select specific mails
-    _, selected_mails = mail.search(None, '(FROM "kh4dien@gmail.com")')
+    _, selected_mails = mail.search(None, email_search)
 
     return mail, selected_mails
 
 
-def getLinks(username, password) :
+def getLinks(username, password, emails) :
     links = []
-    mail, selected_mails = initializeServer(username, password)
+    mail, selected_mails = initializeServer(username, password, emails)
 
     #total number of mails from specific user
     print("Total Messages:" , len(selected_mails[0].split()))
@@ -56,11 +55,12 @@ def getLinks(username, password) :
     return links
     
 
-def start(username, password) :
-    emailLinks = getLinks(username, password)
-    for links in emailLinks :
-        for link in links :
-            requests.get(link) 
+def start(username, password, email_list) :
+    for email in email_list :
+        email_search = '(FROM ' + email + ')'
+        emailLinks = getLinks(username, password, email_search)
+        for links in emailLinks :
+            for link in links :
+                requests.get(link) 
 
-start("cjuang23@sjs.org", "3874NmEb")
-
+start("cjuang23@sjs.org", "3874NmEb", ["elliot.savoie@communications.ttu.edu"])

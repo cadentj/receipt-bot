@@ -10,13 +10,14 @@ def get_colleges_dic() :
     return college_list
 
 def get_colleges() :
-    return get_colleges_dic().keys()
+    return list(get_colleges_dic().keys())
 
 def create_email_list(college_names) :
-    college_list = get_colleges()
+    college_emails = get_colleges_dic()
     email_list = []
     for college in college_names :
-        email_list.append(college_list[college])
+        email_list.append(college_emails.get(college))
 
     print(email_list)
     return email_list
+

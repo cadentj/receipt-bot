@@ -1,7 +1,4 @@
-from doctest import master
-from tabnanny import check
 import tkinter as tk
-from unittest.util import sorted_list_difference
 import receipt
 import functools
 import data
@@ -10,38 +7,48 @@ import data
 selected_colleges = []
 college_checkboxes = {}
 
-def create_college_checkboxes() :
+def initialize_college_dic() :
     college_list = data.get_colleges()
     for college in college_list :
         college_checkboxes.update({college:0})
 
 def process():
-    for status in college_checkboxes : 
-        print(college_checkboxes[status])
+    data.create_email_list(selected_colleges)
+    receipt.start()
 
-    print(selected_colleges)
     
 
-def updateCheck(college) :
+def update_check(college) :
     print(college)
     check_status = college_checkboxes.get(college)
     if check_status == 0 :
         college_checkboxes[college] = 1
-        add_college(college)
+        selected_colleges.append(college)
     elif check_status == 1 :
         college_checkboxes[college] = 0
-        remove_college(college)
+        selected_colleges.remove(college)
 
 
-def add_college(college_name) :
-    selected_colleges.append(college_name)
+# Initializes checkboxes to dictionary
+def create_checkboxes(root) :
+    checkboxes_frame = tk.Frame(master=root)
+
+    initialize_college_dic()
+
+    colleges = data.get_colleges()
+
+    for college_name in colleges :
+        tk.Checkbutton(
+            master = checkboxes_frame, 
+            text=college_name, 
+            command= functools.partial(update_check, college_name)
+        ).pack()
+        print(college_name)
+    
+    checkboxes_frame.grid(row=3, column=0, columnspan=2,sticky='NESW')
 
 
-def remove_college(college_name) :
-    selected_colleges.remove(college_name) 
-
-
-def createBotFrame(root) :
+def create_bot_frame(root) :
 
     # Set constant window size
     root.minsize(300, 400)    
@@ -82,30 +89,14 @@ def createBotFrame(root) :
     root.columnconfigure(1,weight=1)
 
 
-def create_checkboxes(root) :
-    checkboxes_frame = tk.Frame(master=root)
-
-    create_college_checkboxes()
-
-    colleges = data.get_colleges()
-
-    for college_name in colleges :
-        tk.Checkbutton(
-            master = checkboxes_frame, 
-            text=college_name, 
-            command= functools.partial(updateCheck, college_name)
-        ).pack()
-        print(college_name)
-    
-    checkboxes_frame.grid(row=3, column=0, columnspan=2,sticky='NESW')
 
     
 
     
 
-def buildApp() :
-    window = tk.Tk()
-    createBotFrame(window)
-    window.mainloop()
+def build_app() :
+    root = tk.Tk()
+    create_bot_frame(root)
+    root.mainloop()
 
-buildApp()
+build_app()
